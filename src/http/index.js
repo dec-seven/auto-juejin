@@ -13,7 +13,6 @@ const request = axios.create({
 request.interceptors.response.use(
   (response) => {
     const { data } = response
-    console.log(data);
     if (data.err_msg === 'success' && data.err_no === 0) {
       return data
     } else {
