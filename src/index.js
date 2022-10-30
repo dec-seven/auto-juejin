@@ -223,18 +223,4 @@ const start = async () => {
   }
 }
 
-// start()
-
-const sendEmail1 = async () => {
-  try {
-    const {service,user,pass,from,to} = email
-    const transporter = nodeMailer.createTransport({ service, auth: { user, pass}})
-    // 发送邮件
-    await transporter.sendMail({ from, to, subject: '邮件发送测试', html: '这是一封神秘的邮件，用于测试。'})
-    //打印日志
-    console.log(`📨邮件发送成功!`);
-  } catch (error) {
-    console.error(`邮件发送失败！${error}`)
-  }
-}
-sendEmail1()
+start()
