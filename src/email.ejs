@@ -28,8 +28,10 @@
     }
     .top span {
       display: block;
-      margin-left: 20px;
-      font-size: 20px;
+      color: #999999;
+      margin-top: 5px ;
+      margin-left: 25px ;
+      font-size: 16px;
     }
     .top img {
       display: block;
@@ -68,7 +70,7 @@
         <a href="https://juejin.cn/">
           <img src="https://lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg" alt="前往掘金">
         </a>
-        <span>请查收签到日志📄</span>
+        <span><%= title %></span>
       </div>
       <ul>
         <% logs.forEach(function(item){%>

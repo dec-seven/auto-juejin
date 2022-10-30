@@ -19,6 +19,9 @@ const fs = require('fs')
 // path是用于处理文件路径的模块
 const path = require('path')
 
+// Day.js是一个极简的JavaScript库，可以为现代浏览器解析、验证、操作和显示日期和时间
+const dayjs = require('dayjs')
+
 /**
  * 查询今天是否已经签到
  *
@@ -160,12 +163,13 @@ const checkIn = async () => {
  */
 const sendEmail = async () => {
   try {
+    // ejs.compile(str, options) 输出渲染后的 HTML 字符串
     const template = ejs.compile(fs.readFileSync(path.resolve(__dirname, 'email.ejs'), 'utf8'));
     const {service,user,pass,from,to} = email
     const transporter = nodeMailer.createTransport({ service, auth: { user, pass}})
     // 发送邮件
-    const sendEmailRes = await transporter.sendMail({ from, to, subject: '🔔掘金签到通知', html: template({ logs: logs })})
-    // const sendEmailRes = await transporter.sendMail({ from, to, subject: '🔔掘金签到通知',html:'test'})
+    const todayStr = '请查收'+ dayjs().format('YYYY年MM月DD日') + '签到日志' 
+    await transporter.sendMail({ from, to, subject: '🔔掘金签到通知', html: template({ logs: logs ,title:todayStr})})
     //打印日志
     console.log(`📨邮件发送成功!`);
   } catch (error) {
@@ -198,19 +202,39 @@ const start = async () => {
     })
     console.oldErr(str)
   }
-
-  // 签到 
-  await checkIn()
-  // 抽奖
-  await draw()
-  // 沾喜气
-  await dipLucky()
-  // 当前矿石数量
-  await getCurrentPoint()
-  // 当前签到数据
-  await getCheckInDays()
-  // 发送邮件
-  await sendEmail()
+ 
+  try {
+    // 签到 
+    await checkIn()
+    // 抽奖
+    await draw()
+    // 沾喜气
+    await dipLucky()
+    // 当前矿石数量
+    await getCurrentPoint()
+    // 当前签到数据
+    await getCheckInDays()
+    // 发送邮件
+    await sendEmail()
+    return true
+  } catch (error) {
+    console.log(error);
+    return false
+  }
 }
 
-start()
+// start()
+
+const sendEmail1 = async () => {
+  try {
+    const {service,user,pass,from,to} = email
+    const transporter = nodeMailer.createTransport({ service, auth: { user, pass}})
+    // 发送邮件
+    await transporter.sendMail({ from, to, subject: '邮件发送测试', html: '这是一封神秘的邮件，用于测试。'})
+    //打印日志
+    console.log(`📨邮件发送成功!`);
+  } catch (error) {
+    console.error(`邮件发送失败！${error}`)
+  }
+}
+sendEmail1()
